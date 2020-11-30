@@ -8,7 +8,9 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git clone 'https://github.com/tarundubai/jenkins-docker-kubernetes-git'
+        script {
+        sh "git clone https://github.com/tarundubai/jenkins-docker-kubernetes-git"
+        }
       }
     }
     stage('Building image') {
