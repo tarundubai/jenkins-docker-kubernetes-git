@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('Build') {
-          echo "Build Started...-Tarun" 
+          sh 'echo Build Started...'
         }
         stage('Build Docker Image') {
             when {
