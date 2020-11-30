@@ -2,8 +2,7 @@ pipeline {
   environment {
     registry = "biswasttt/nginx"
     registryCredential = 'docker_hub_login'
-    dockerImage = ''
-    BUILD_NUMBER = 1000
+    dockerImage = ''  
   }
   agent any
   stages {
