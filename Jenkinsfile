@@ -1,37 +1,34 @@
 pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-            sh 'echo Build Started...'
-            }
+  environment {
+    registry = "biswasttt/nginx"
+    registryCredential = 'docker_hub_login'
+    dockerImage = ''  
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        script {
+        sh "git clone https://github.com/tarundubai/jenkins-docker-kubernetes-git"
         }
-        stage('Build Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    app = docker.build("biswasttt/nginxtest")
-                    app.inside {
-                        sh 'echo $(curl localhost:8080)'
-                    }
-                }
-            }
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
-        stage('Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-                    }
-                }
-            }
+      }
+    }
+    stage('Push Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
         }
+      }
+    }
         stage('DeployToProduction') {
             when {
                 branch 'main'
@@ -41,14 +38,14 @@ pipeline {
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker pull biswasttt/nginxtest:${env.BUILD_NUMBER}\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker pull biswasttt/nginx:${env.BUILD_NUMBER}\""
                         try {
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker stop nginxtest\""
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker rm nginxtest\""
+                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker stop nginx\""
+                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker rm nginx\""
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker run --restart always --name nginxtest -p 8080:8080 -d biswasttt/nginxtest:${env.BUILD_NUMBER}\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker run --restart always --name nginx -p 8080:8080 -d biswasttt/nginx:${env.BUILD_NUMBER}\""
                     }
                 }
             }
