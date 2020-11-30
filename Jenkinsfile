@@ -1,8 +1,9 @@
 pipeline {
   environment {
-    registry = "biswasttt/tarunrepo"
+    registry = "biswasttt/nginx"
     registryCredential = 'docker_hub_login'
     dockerImage = ''
+    BUILD_NUMBER = 1000
   }
   agent any
   stages {
@@ -16,11 +17,11 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build registry + "_$BUILD_NUMBER"
         }
       }
     }
-    stage('Deploy Image') {
+    stage('Push Image') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
@@ -31,7 +32,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
+        sh "docker rmi $registry_$BUILD_NUMBER"
       }
     }
   }
