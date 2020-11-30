@@ -16,7 +16,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage= `sh docker build -t biswasttt/nginx + ":$BUILD_NUMBER"`        
         }
       }
     }
