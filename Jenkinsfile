@@ -3,12 +3,14 @@ pipeline {
     registry = "biswasttt/nginx"
     registryCredential = 'docker_hub_login'
     dockerImage = ''  
+    PATH = '/var/lib/jenkins/workspace/MB-DOCKER_main'
   }
   agent any
   stages {
     stage('Cloning Git') {
       steps {
         script {
+          sh "rm -rf $PATH/jenkins-docker-kubernetes-git"
         sh "git clone https://github.com/tarundubai/jenkins-docker-kubernetes-git"
         }
       }
