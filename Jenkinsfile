@@ -45,7 +45,7 @@ pipeline {
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"sed 's/nginx:14/${env.BUILD_NUMBER}/g' /root/tarun/docker-compose.yml\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"sed 's/nginx:14/nginx:${env.BUILD_NUMBER}/g' /root/tarun/docker-compose.yml\""
                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker-compose -f /root/tarun/docker-compose.yml up -d\""
                     }
                 }
