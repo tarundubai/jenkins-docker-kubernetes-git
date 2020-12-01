@@ -10,8 +10,7 @@ pipeline {
     stage('Cloning Git') {
       steps {
         script {
-          sh """rm -rf $PATH/jenkins-docker-kubernetes-git"""
-        sh "git clone https://github.com/tarundubai/jenkins-docker-kubernetes-git"
+          sh "git clone https://github.com/tarundubai/jenkins-docker-kubernetes-git"
         }
       }
     }
