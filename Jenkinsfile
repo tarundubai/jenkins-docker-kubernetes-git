@@ -2,8 +2,7 @@ pipeline {
   environment {
     registry = "biswasttt/nginx"
     registryCredential = 'docker_hub_login'
-    dockerImage = ''  
-    PATH = '/var/lib/jenkins/workspace/MB-DOCKER_main'
+    dockerImage = ''     
   }
   agent any
   stages {
