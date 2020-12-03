@@ -38,7 +38,7 @@ pipeline {
                 milestone(1)
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'n.yml',
+                    configs: 'nginx.yml',
                     enableConfigSubstitution: true
                 )
             }
