@@ -13,3 +13,33 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: nginx-test
+    run: nginx
+  name: nginx
+  namespace: default
+  resourceVersion: "64752"
+  uid: 5113cfd3-d02f-4930-8d7a-c90298fdfb04
+spec:
+  clusterIP: 10.106.201.222
+  clusterIPs:
+  - 10.106.201.222
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 30406
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app.kubernetes.io/instance: nginx-test
+    run: nginx
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
