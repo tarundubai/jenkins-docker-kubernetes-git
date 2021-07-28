@@ -13,6 +13,7 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,9 +22,7 @@ metadata:
     run: nginx
   name: nginx
   namespace: default
-  
 spec:
- 
   ports:
   - nodePort: 30406
     port: 8080
