@@ -7,7 +7,7 @@ metadata:
   name: nginx
 spec:
   containers:
-  - image: biswasttt/nginx_20
+  - image: biswasttt/nginx_1000
     name: nginx
     resources: {}
   dnsPolicy: ClusterFirst
