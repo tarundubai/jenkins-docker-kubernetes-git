@@ -29,26 +29,18 @@ pipeline {
         }
       }
     }
-        stage('DeployToProduction') {
+      stage('DeployToProduction') {
             when {
-                branch 'main'
+                branch 'kubernetesonly'
             }
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
-                    script {
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker pull biswasttt/nginx:${env.BUILD_NUMBER}\""
-                        try {
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker stop nginx\""
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker rm nginx\""
-                        } catch (err) {
-                            echo: 'caught error: $err'
-                        }
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"sed 's/nginx:14/nginx:${env.BUILD_NUMBER}/g' /root/tarun/docker-compose.yml\""
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_id \"docker-compose -f /root/tarun/docker-compose.yml up -d\""
-                    }
-                }
+                kubernetesDeploy(
+                    kubeconfigId: 'kubeconfig',
+                    configs: 'nginx.yml',
+                    enableConfigSubstitution: true
+                )
             }
         }
     }
