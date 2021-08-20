@@ -1,1 +1,1 @@
-kubectl get nodes
+kubectl.exe  get pod -n systest
