@@ -44,8 +44,7 @@ for f in $LIST_TEST_FILES ; do
 kubectl cp  $DEP_DIR/$f  systest/$POD_NAME:/home/robot/   --kubeconfig=/home/tarun/.kube/config-tsm-dev -n systest ;
 done
 sleep 10
-
-# Copy files to /home/robot/test 
+#Copy files to /home/robot/test 
 LIST_TEST_FILES=`ls /home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-base-test/e2e-base-test/robot-tests/src/main/resources/robot/tests`
 POD_NAME=`kubectl get pods  --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'  -n systest --kubeconfig=../.kube/config-tsm-dev | grep robot`
 TEST_DIR=/home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-base-test/e2e-base-test/robot-tests/src/main/resources/robot/tests/
