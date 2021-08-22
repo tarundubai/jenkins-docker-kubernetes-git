@@ -39,8 +39,12 @@ echo " TESTING..........."
 # create selenium standalone-chrome and browsermob proxy
 kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
 
+sleep 30
+
 # Create robot framework
 kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-robot-deploy.log
+
+sleep 20
 
 #Get the robot pod named
 POD_NAME=`kubectl get pods  --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'  -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev | grep robot`
@@ -76,9 +80,9 @@ sleep 10
 
 # Execute the test cases
 echo "Testing............"
-kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev sh > /home/tarun/exb/logs/robot-login.log
-echo "Testing Before Finish............"
-/usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
+kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev /usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output . > /home/tarun/exb/logs/robot.log
+echo "Testing Finish............"
+#/usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
 echo "Testing Finished............"
 
 ############# STEP- 6 #############
