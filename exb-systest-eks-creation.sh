@@ -25,33 +25,29 @@
 
 # create a namespace 'systest'
 
-kubectl apply -f systest-create-ns.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-create-ns.log
+kubectl apply -f systest-create-ns.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-create-ns.log
 
 # Get the HELM chart from bitbucket and create tsm server named with tsm-systest
 
 #cd /home/tarun/exb/repo/helm/charts/tsm-server
 
-#helm install tsm-systest . -f values.yaml -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev  --dry-run >> /home/tarun/exb/logs/tsm-systest.log
+#helm install tsm-systest . -f values.yaml -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev  --dry-run=client > /home/tarun/exb/logs/tsm-systest.log
 
 #sleep 120
 
-# create selenium/standalone-chrome and browsermob-proxy
-
-kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
+#create selenium/standalone-chrome and browsermob-proxy
+kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
 
 
 # Create robot framework
-
-kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-robot-deploy.log
-
-# Get the robot pod named
+kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-robot-deploy.log
+#Get the robot pod named
 POD_NAME=`kubectl get pods  --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'  -n systest --kubeconfig=../.kube/config-tsm-dev | grep robot`
 echo $POD_NAME >> /home/tarun/exb/logs/pod_name.log
 
 # make test and dependencies
 kubectl exec -it $POD_NAME -n systest --kubeconfig=../.kube/config-tsm-dev  /bin/mkdir /home/robot/test  /home/robot/dependencies 
-
-# /home/robot/test Depencies
+# copy files to /home/robot/test from Depencies
 LIST_DEP_FILES=`ls /home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources`
 DEP_DIR=/home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources
 for f in $LIST_TEST_FILES ; do
