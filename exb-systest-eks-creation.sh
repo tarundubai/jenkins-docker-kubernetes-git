@@ -25,7 +25,7 @@
 kubectl apply -f systest-create-ns.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-create-ns.log
 # Get the HELM chart from bitbucket and create tsm server named with tsm-systest
 #cd /home/tarun/exb/repo/helm/charts/tsm-server
-#helm install tsm-systest . -f values.yaml -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev  --dry-run=client > /home/tarun/exb/logs/tsm-systest.log
+#helm install tsm-systest . -f values.yaml -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev  --dry-run=client
 #create selenium/standalone-chrome and browsermob-proxy
 kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
 # Create robot framework
