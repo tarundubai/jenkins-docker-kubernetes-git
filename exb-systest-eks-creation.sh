@@ -45,19 +45,15 @@ kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.k
 kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-robot-deploy.log
 
 # Get the robot pod named
-
 POD_NAME=`kubectl get pods  --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'  -n systest --kubeconfig=../.kube/config-tsm-dev | grep robot`
 echo $POD_NAME >> /home/tarun/exb/logs/pod_name.log
 
 # make test and dependencies
-
 kubectl exec -it $POD_NAME -n systest --kubeconfig=../.kube/config-tsm-dev  /bin/mkdir /home/robot/test  /home/robot/dependencies 
 
 # /home/robot/test Depencies
-
 LIST_DEP_FILES=`ls /home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources`
 DEP_DIR=/home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources
-
 for f in $LIST_TEST_FILES ; do
 #cp -r  $DIR/$f /tmp ;
 kubectl cp  $DEP_DIR/$f  systest/$POD_NAME:/home/robot/   --kubeconfig=/home/tarun/.kube/config-tsm-dev -n systest ;
