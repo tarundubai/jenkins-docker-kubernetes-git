@@ -52,7 +52,7 @@ kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-
 # copy files to /home/robot/test from Depencies
 LIST_DEP_FILES=`ls /home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources`
 DEP_DIR=/home/tarun/exb/repo/cloud_processing/tsm-e2e/tsm-e2e-build-tools/e2e-robot-libraries/src/main/shared-robot-resources
-for f in $LIST_TEST_FILES ; do
+for f in $LIST_DEP_FILES ; do
 #cp -r  $DIR/$f /tmp ;
 kubectl cp  $DEP_DIR/$f  systest/$POD_NAME:/home/robot/   --kubeconfig=/home/tarun/.kube/config-tsm-dev -n systest ;
 done
@@ -77,9 +77,9 @@ sleep 10
 # Execute the test cases
 echo "Testing............"
 kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev sh > /home/tarun/exb/logs/robot-login.log
-echo "Testing Finish............"
-#/usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
-
+echo "Testing Before Finish............"
+/usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
+echo "Testing Finished............"
 
 ############# STEP- 6 #############
 
