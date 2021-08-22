@@ -91,3 +91,5 @@ echo "Testing Finished............"
 
 # Destroy the enviornments
 
+#kubectl delete -f systest-create-ns.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-delete-ns.log
+
