@@ -75,7 +75,9 @@ sleep 10
 ############# STEP- 5 #############
 
 # Execute the test cases
+echo "Testing............"
 kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev sh > /home/tarun/exb/logs/robot-login.log
+echo "Testing Finish............"
 #/usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
 
 
