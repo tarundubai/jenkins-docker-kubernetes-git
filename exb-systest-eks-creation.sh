@@ -1,17 +1,29 @@
 #!/bin/sh
 # This script will create a system test env of TSM server on AWS EKS  compirses TSM server , selenium/standalone-chrome , browsermob-proxy and robot framework
+
+############# STEP- 1 #############
+
 # Get an AWS IAM user with fixed Access key and Security Access Key and Permission to access on EKS
 
 # Need to add in EKS aws-auth config file
 #aws configure        # This has to be done all workers agent nodes in Teamcity 
 
+
+############# STEP- 2 #############
+
+
 # Install helm
+
+############# STEP- 3 #############
+
 # Install kubectl in all workers agent nodes in Teamcity 
 #curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
 #chmod +x ./kubectl
 #mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
 #echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
 #kubectl version --short --client
+
+############# STEP- 4 #############
 
 # Get the kubeconfig file from EKS with AWS IAM user access key and secure access key
 
@@ -60,6 +72,14 @@ sleep 10
 kubectl cp  $TEST_DIR/fixtures  systest/$POD_NAME:/home/robot/test  --kubeconfig=/home/tarun/.kube/config-tsm-dev -n systest
 sleep 10
 
+############# STEP- 5 #############
+
 # Execute the test cases
 kubectl exec -it $POD_NAME -n systest --kubeconfig=/home/tarun/.kube/config-tsm-dev sh > /home/tarun/exb/logs/robot-login.log
 /usr/local/bin/wait-for-it.sh -t 60 tsm-systest:8888 -- robot -d output .  > /home/robot/output/robot.log
+
+
+############# STEP- 6 #############
+
+# Destroy the enviornments
+
