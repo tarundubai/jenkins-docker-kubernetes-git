@@ -37,12 +37,12 @@ kubectl apply -f systest-create-ns.yaml --kubeconfig=/home/tarun/.kube/config-ts
 
 # create selenium/standalone-chrome and browsermob-proxy
 
-kubectl apply -f -n systest systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
+kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
 
 
 # Create robot framework
 
-kubectl apply -f -n systest systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-robot-deploy.log
+kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run >> /home/tarun/exb/logs/systest-robot-deploy.log
 
 # Get the robot pod named
 
@@ -88,5 +88,4 @@ sleep 10
 
 kubectl exec -it $POD_NAME -n systest --kubeconfig=../.kube/config-tsm-dev sh
 
-wait-for-it.sh -t 60 tsm:8888 -- robot -d output .  >> /home/tarun/exb/logs/robot.log
-
+#wait-for-it.sh -t 60 tsm:8888 -- robot -d output .  >> /home/tarun/exb/logs/robot.log
