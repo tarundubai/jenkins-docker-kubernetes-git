@@ -37,12 +37,14 @@ echo " TESTING..........."
 
 
 # create selenium standalone-chrome and browsermob proxy
-kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
+#kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
+kubectl apply -f  systest-selenium-proxy-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev > /home/tarun/exb/logs/systest-selenium-proxy-deploy.log
 
 sleep 30
 
 # Create robot framework
-kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-robot-deploy.log
+#kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev --dry-run=client > /home/tarun/exb/logs/systest-robot-deploy.log
+kubectl apply -f systest-robot-deploy.yaml --kubeconfig=/home/tarun/.kube/config-tsm-dev  > /home/tarun/exb/logs/systest-robot-deploy.log
 
 sleep 20
 
