@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: systest
+  name: robot
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: robot
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: robot
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+ #       allowPrivilegeEscalation: true
+      containers:
+        - image: 138239023781.dkr.ecr.eu-central-1.amazonaws.com/exb_de/third_party/robotframework:v.3.8
+          imagePullPolicy: Always
+          name: robot
+          command: ['sh', '-c', 'echo The app is running! && sleep 84600']
+          volumeMounts:
+            - name: downloads
+              mountPath: /home/robot/Downloads
+            - mountPath: /home/robot/output
+              name: output
+          env:
+          - name: BROWSER
+            value: chrome
+          - name: BROWSER_REMOTE_URL
+            value: http://chrome:4444/wd/hub
+          - name: ROBOT_SYSLOG_FILE
+            value: /home/robot/output/syslog.txt
+          - name: ROBOT_SYSLOG_LEVEL
+            value: DEBUG
+          - name: TSM_DISABLE_WARNINGS
+            value: "0"
+          - name: TSM_PORT
+            value: "8888"
+          - name: TSM_PROTO
+            value: http
+          - name: TSM_SERVER
+            value: tsm-systest
+      volumes:
+        - name: downloads
+          emptyDir: {}
+        - name: output
+          emptyDir: {}
+#      initContainers:
+#       - image: 138239023781.dkr.ecr.eu-central-1.amazonaws.com/exb_de/third_party/robotframework:v.3.7
+#          name: init-robot
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: systest
+  name: robot
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: robot       
